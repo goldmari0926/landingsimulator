@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>우주선 착륙 게임 - 스테이지 선택 & 업그레이드</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- =====================================================
+         화면 1: 업그레이드 + 미션 선택 화면
+         ===================================================== -->
+    <section id="screen-upgrade" class="screen">
+      <div class="upgrade-wrap">
+        <header class="upgrade-header">
+          <h1>🚀 우주선 업그레이드</h1>
+          <div class="credits-display">Credits: <span id="credits-value">0</span></div>
+        </header>
+
+        <div class="ship-info-panel">
+          <div class="ship-info-row"><span class="hud-label">질량</span><span id="info-mass" class="hud-value">-</span></div>
+          <div class="ship-info-row"><span class="hud-label">최대 추력</span><span id="info-thrust" class="hud-value">-</span></div>
+          <div class="ship-info-row"><span class="hud-label">최대 연료</span><span id="info-fuel" class="hud-value">-</span></div>
+          <div class="ship-info-row"><span class="hud-label">회전 제어</span><span id="info-rotation" class="hud-value">-</span></div>
+          <div class="ship-info-row hidden" id="info-cooling-row"><span class="hud-label">냉각 속도</span><span id="info-cooling" class="hud-value">-</span></div>
+          <div class="ship-info-row hidden" id="info-thermalshield-row"><span class="hud-label">환경열 차단</span><span id="info-thermalshield" class="hud-value">-</span></div>
+        </div>
+
+        <div id="upgrade-cards" class="upgrade-cards"></div>
+
+        <div class="section-divider"></div>
+        <h2 class="section-title">🌍 MISSION SELECT</h2>
+        <div id="stage-cards" class="stage-cards"></div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         화면 2: 게임(착륙) 화면
+         ===================================================== -->
+    <section id="screen-game" class="screen hidden">
+      <div id="game-container">
+        <canvas id="gameCanvas" width="900" height="600"></canvas>
+
+        <!-- HUD -->
+        <div id="hud">
+          <div class="hud-title">FLIGHT DATA</div>
+
+          <div class="hud-row">
+            <span class="hud-label">스테이지</span>
+            <span id="stage-name" class="hud-value">STAGE 1</span>
+          </div>
+          <div class="hud-row">
+            <span class="hud-label">상태</span>
+            <span id="status" class="hud-value status-safe">SAFE</span>
+          </div>
+          <div class="hud-row">
+            <span class="hud-label">속력 (합성)</span>
+            <span id="speed" class="hud-value">0.0 m/s</span>
+          </div>
+          <div class="hud-row">
+            <span class="hud-label">수직 속도 (Vy)</span>
+            <span id="vSpeed" class="hud-value">0.0 m/s</span>
+          </div>
+          <div class="hud-row">
+            <span class="hud-label">수평 속도 (Vx)</span>
+            <span id="hSpeed" class="hud-value">0.0 m/s</span>
+          </div>
+          <div class="hud-row">
+            <span class="hud-label">고도</span>
+            <span id="altitude" class="hud-value">0.0 m</span>
+          </div>
+          <div class="hud-row">
+            <span class="hud-label">기울기</span>
+            <span id="angle" class="hud-value">0.0°</span>
+          </div>
+          <div class="hud-row">
+            <span class="hud-label">중력 가속도 (g)</span>
+            <span id="gravity" class="hud-value">1.62 m/s²</span>
+          </div>
+        </div>
+
+        <!-- 연료 게이지 -->
+        <div id="fuel-panel">
+          <div class="hud-label">FUEL</div>
+          <div id="fuel-bar-track">
+            <div id="fuel-bar-fill"></div>
+          </div>
+          <div id="fuel-percent">100%</div>
+        </div>
+
+        <!-- 바람 게이지 (Stage 2 이상에서만 표시) -->
+        <div id="wind-panel" class="hidden">
+          <div class="hud-label">WIND</div>
+          <div id="wind-value" class="hud-value">→ 0.0 m/s</div>
+          <div id="density-value" class="hud-sub hidden">ATMOSPHERIC DENSITY: HIGH</div>
+        </div>
+
+        <!-- 온도 게이지 (Stage 3 이상에서만 표시) -->
+        <div id="heat-panel" class="hidden">
+          <div class="hud-label">TEMPERATURE</div>
+          <div id="heat-bar-track">
+            <div id="heat-bar-fill"></div>
+          </div>
+          <div id="heat-value">20°C</div>
+          <div id="engine-efficiency-value">ENGINE 100%</div>
+          <div id="ambient-value" class="hud-sub">AMBIENT 40°C</div>
+          <div id="heat-warning" class="hidden"></div>
+        </div>
+
+        <!-- 조작법 안내 -->
+        <div id="controls">
+          <div><kbd>W</kbd>/<kbd>↑</kbd> 메인 추진기</div>
+          <div><kbd>A</kbd>/<kbd>←</kbd> 좌회전 추진기</div>
+          <div><kbd>D</kbd>/<kbd>→</kbd> 우회전 추진기</div>
+          <div><kbd>R</kbd> 재시작</div>
+        </div>
+
+        <!-- 착륙 성공 / 실패 오버레이 -->
+        <div id="message-overlay" class="hidden">
+          <div id="message-text"></div>
+          <div id="message-credits" class="hidden"></div>
+          <div id="message-sub"></div>
+          <button id="overlay-btn" class="hidden">미션 선택으로</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
