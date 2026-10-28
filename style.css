@@ -1,0 +1,568 @@
+:root {
+  --bg-void: #05070d;
+  --panel-bg: rgba(10, 16, 28, 0.82);
+  --panel-border: #2a3a52;
+  --text-main: #d7e2f0;
+  --text-dim: #7488a3;
+  --accent-cyan: #4fd6c9;
+  --accent-orange: #ff9f4a;
+  --accent-red: #ff5a5f;
+  --accent-blue: #5aa9ff;
+  --font-mono: "Consolas", "SFMono-Regular", "Menlo", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  background: var(--bg-void);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+}
+
+.hidden {
+  display: none !important;
+}
+
+button {
+  font-family: var(--font-mono);
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* ===================================================================
+   공통: 화면(Screen) 컨테이너
+   =================================================================== */
+
+#app {
+  width: 900px;
+  margin: 24px auto;
+}
+
+.screen {
+  width: 100%;
+}
+
+/* ===================================================================
+   업그레이드 화면
+   =================================================================== */
+
+.upgrade-wrap {
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  background: radial-gradient(ellipse at top, #0c1526 0%, var(--bg-void) 70%);
+  box-shadow: 0 0 60px rgba(79, 214, 201, 0.08);
+  padding: 22px 26px 28px;
+}
+
+.upgrade-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+
+.upgrade-header h1 {
+  font-size: 20px;
+  margin: 0;
+  letter-spacing: 0.5px;
+  color: var(--text-main);
+}
+
+.credits-display {
+  font-size: 16px;
+  color: var(--accent-orange);
+  font-weight: bold;
+}
+
+.ship-info-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+.ship-info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ship-info-row .hud-label {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.ship-info-row .hud-value {
+  color: var(--accent-cyan);
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.upgrade-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.upgrade-card {
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  background: var(--panel-bg);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.upgrade-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.upgrade-name {
+  font-size: 14px;
+  color: var(--text-main);
+  font-weight: bold;
+}
+
+.upgrade-level {
+  font-size: 12px;
+  color: var(--accent-cyan);
+}
+
+.upgrade-current,
+.upgrade-next {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.upgrade-current {
+  color: var(--text-main);
+}
+
+.upgrade-cost {
+  font-size: 12px;
+  color: var(--accent-orange);
+  margin-top: 2px;
+}
+
+.upgrade-btn {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: #16202f;
+  border: 1px solid var(--accent-cyan);
+  border-radius: 3px;
+  color: var(--accent-cyan);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: background 0.15s ease;
+}
+
+.upgrade-btn:not(:disabled):hover {
+  background: #1d2f42;
+}
+
+.upgrade-btn:disabled {
+  border-color: var(--panel-border);
+  color: var(--text-dim);
+}
+
+.section-divider {
+  border-top: 1px solid var(--panel-border);
+  margin: 20px 0 16px;
+}
+
+.section-title {
+  font-size: 15px;
+  margin: 0 0 12px;
+  color: var(--text-main);
+  letter-spacing: 0.5px;
+}
+
+.stage-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.stage-card {
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  background: var(--panel-bg);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stage-card.locked {
+  opacity: 0.55;
+}
+
+.stage-card-header {
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 8px;
+  margin-bottom: 2px;
+}
+
+.stage-name {
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--text-main);
+}
+
+.stage-subtitle {
+  font-size: 12px;
+  color: var(--accent-cyan);
+}
+
+.stage-meta {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.stage-reward {
+  font-size: 12px;
+  color: var(--accent-orange);
+  font-weight: bold;
+  margin-top: 2px;
+}
+
+.stage-warning {
+  font-size: 10px;
+  color: var(--accent-red);
+  line-height: 1.5;
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--panel-border);
+}
+
+.stage-locked-msg {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin: 2px 0 4px;
+}
+
+.stage-btn {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: #16202f;
+  border: 1px solid var(--accent-cyan);
+  border-radius: 3px;
+  color: var(--accent-cyan);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.stage-btn:not(:disabled):hover {
+  background: #1d2f42;
+}
+
+.stage-btn:disabled {
+  border-color: var(--panel-border);
+  color: var(--text-dim);
+}
+
+/* ===================================================================
+   게임 화면 (기존 1단계 UI)
+   =================================================================== */
+
+#game-container {
+  position: relative;
+  width: 900px;
+  height: 600px;
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  box-shadow: 0 0 60px rgba(79, 214, 201, 0.08);
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  background: var(--bg-void);
+}
+
+/* ---------- HUD ---------- */
+
+#hud {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  min-width: 210px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.7;
+  backdrop-filter: blur(2px);
+}
+
+.hud-title {
+  color: var(--accent-cyan);
+  letter-spacing: 1px;
+  font-size: 11px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 4px;
+}
+
+.hud-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  white-space: nowrap;
+}
+
+.hud-label {
+  color: var(--text-dim);
+}
+
+.hud-value {
+  color: var(--text-main);
+  font-weight: bold;
+}
+
+.status-safe { color: var(--accent-cyan); }
+.status-danger { color: var(--accent-orange); }
+.status-landed { color: var(--accent-blue); }
+.status-crash { color: var(--accent-red); }
+
+/* ---------- 연료 게이지 ---------- */
+
+#fuel-panel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 150px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  padding: 10px 14px;
+  font-size: 11px;
+}
+
+#fuel-bar-track {
+  margin-top: 6px;
+  width: 100%;
+  height: 12px;
+  background: #0d1420;
+  border: 1px solid var(--panel-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+#fuel-bar-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--accent-cyan), #7be3d8);
+  transition: width 0.1s linear, background 0.2s linear;
+}
+
+#fuel-percent {
+  margin-top: 4px;
+  text-align: right;
+  color: var(--text-dim);
+}
+
+/* ---------- 바람 게이지 (Stage 2+) ---------- */
+
+#wind-panel {
+  position: absolute;
+  top: 92px;
+  right: 12px;
+  width: 150px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  padding: 10px 14px;
+  font-size: 11px;
+}
+
+#wind-value {
+  margin-top: 4px;
+  color: var(--accent-blue);
+  font-size: 14px;
+}
+
+/* ---------- 온도 게이지 (Stage 3+) ---------- */
+
+#heat-panel {
+  position: absolute;
+  top: 174px;
+  right: 12px;
+  width: 150px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  padding: 10px 14px;
+  font-size: 11px;
+  transition: border-color 0.2s ease;
+}
+
+#heat-bar-track {
+  margin-top: 6px;
+  width: 100%;
+  height: 12px;
+  background: #0d1420;
+  border: 1px solid var(--panel-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+#heat-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-cyan), #7be3d8);
+  transition: width 0.15s linear, background 0.2s linear;
+}
+
+#heat-value {
+  margin-top: 4px;
+  text-align: right;
+  color: var(--text-dim);
+  font-size: 14px;
+}
+
+#engine-efficiency-value {
+  margin-top: 2px;
+  text-align: right;
+  color: var(--text-dim);
+  font-size: 10px;
+}
+
+.hud-sub {
+  margin-top: 2px;
+  text-align: right;
+  color: var(--text-dim);
+  font-size: 10px;
+}
+
+#heat-warning {
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  text-align: center;
+  white-space: pre-line;
+}
+
+#heat-panel.heat-warning {
+  border-color: var(--accent-orange);
+}
+#heat-panel.heat-warning #heat-bar-fill {
+  background: linear-gradient(90deg, var(--accent-orange), #ffc27a);
+}
+#heat-panel.heat-warning #heat-value,
+#heat-panel.heat-warning #heat-warning {
+  color: var(--accent-orange);
+}
+
+#heat-panel.heat-overheat {
+  border-color: var(--accent-red);
+}
+#heat-panel.heat-overheat #heat-bar-fill {
+  background: linear-gradient(90deg, var(--accent-red), #ff8a8a);
+}
+#heat-panel.heat-overheat #heat-value,
+#heat-panel.heat-overheat #heat-warning {
+  color: var(--accent-red);
+}
+
+/* ---------- 조작법 ---------- */
+
+#controls {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  padding: 8px 12px;
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 16px;
+  text-align: center;
+  padding: 1px 5px;
+  background: #16202f;
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+}
+
+/* ---------- 성공 / 실패 오버레이 ---------- */
+
+#message-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(3, 5, 10, 0.55);
+}
+
+#message-text {
+  font-size: 40px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+#message-overlay.landed #message-text { color: var(--accent-blue); }
+#message-overlay.crashed #message-text { color: var(--accent-red); }
+
+#message-credits {
+  font-size: 18px;
+  color: var(--accent-orange);
+  font-weight: bold;
+}
+
+#message-sub {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+#overlay-btn {
+  margin-top: 6px;
+  padding: 10px 18px;
+  background: #16202f;
+  border: 1px solid var(--accent-cyan);
+  border-radius: 3px;
+  color: var(--accent-cyan);
+  font-size: 13px;
+  font-weight: bold;
+}
+
+#overlay-btn:hover {
+  background: #1d2f42;
+}
